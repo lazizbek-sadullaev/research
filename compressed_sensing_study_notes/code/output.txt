@@ -1,0 +1,72 @@
+=== A) l_p 'norma':  ||theta||_p = (sum |theta_i|^p)^(1/p) ===
+p = 2:  spike (1,0,0,0) -> 1.000    flat (0.5,0.5,0.5,0.5) -> 1.000
+p = 1:  spike (1,0,0,0) -> 1.000    flat (0.5,0.5,0.5,0.5) -> 2.000
+p = 0.5:  spike (1,0,0,0) -> 1.000    flat (0.5,0.5,0.5,0.5) -> 8.000
+
+=== B) N-term approximation: theta_k = k^(-1/p), p = 1/2, m = 1000 ===
+||theta||_p = 56.0   (R)
+N =  10:  xato = 0.01693    N^(1/2-1/p) = 0.03162
+N =  20:  xato = 0.00622    N^(1/2-1/p) = 0.01118
+N =  40:  xato = 0.00224    N^(1/2-1/p) = 0.00395
+xato(10)/xato(20) = 2.72   (2^1.5 = 2.83 )
+
+=== C) Haar transform, m = 4 ===
+x = [3. 3. 1. 1.]   theta = Psi^T x = [4. 2. 0. 0.]   Psi theta = [3. 3. 1. 1.]
+
+=== D) Gel'fand width: L1 shari (romb) R^2 da, n = 1 o'lchov ===
+a=(1,0)  -> nullspace = e2 o'qi:  romb bilan kesishma nuqtasi [-0.  1.],  radius = 1.000
+a=(1,-1) -> nullspace = diagonal (1,1):  romb bilan kesishma nuqtasi [0.5 0.5],  radius = 0.707
+m=1000, n=100:  sqrt(log(m/n)/n) = 0.1517
+m=1000, n=400:  sqrt(log(m/n)/n) = 0.0479
+m=1000000, n=10000:  sqrt(log(m/n)/n) = 0.0215
+
+=== E) 2x3 matritsa: (P1) nimani tiklaydi ===
+x0 = [0.    0.    1.414]  y = [1. 1.]  (P1) -> [-0.     0.     1.414]
+x0 = [1. 0. 0.]  y = [1. 0.]  (P1) -> [1. 0. 0.]
+x0 = [1. 1. 0.]  y = [1. 1.]  (P1) -> [-0.     0.     1.414]
+dual sertifikat y=(0.707,0.707): Phi^T y = [0.707 0.707 1.   ]
+x0=(1,1,0) uchun kerak y=(1,1):  Phi^T y = [1.    1.    1.414]  (uchinchisi > 1: bo'lmaydi)
+
+=== F) Asosiy tajriba: m = 256, n = 64, 8 ta nolmas ===
+||x1 - x0||_2 = 7.41e-14    ||x2 - x0||_2 = 3.813
+nolmaslar: x0 = 8   x1 = 8   x2 = 256
+N log m = 8 * log(256) = 44.4
+
+=== G) Aniq tiklash ulushi (m = 200, 40 tajriba) ===
+k =  5: {10: 0.0, 20: 0.275, 30: 0.925, 40: 1.0, 50: 1.0, 60: 1.0, 70: 1.0, 80: 1.0, 90: 1.0, 100: 1.0, 110: 1.0, 120: 1.0}
+k = 10: {10: 0.0, 20: 0.0, 30: 0.025, 40: 0.625, 50: 1.0, 60: 1.0, 70: 1.0, 80: 1.0, 90: 1.0, 100: 1.0, 110: 1.0, 120: 1.0}
+k = 20: {10: 0.0, 20: 0.0, 30: 0.0, 40: 0.0, 50: 0.0, 60: 0.175, 70: 0.875, 80: 1.0, 90: 1.0, 100: 1.0, 110: 1.0, 120: 1.0}
+
+=== H) Compressible signal: |theta|_(k) = k^(-2)  (p = 1/2), m = 512 ===
+n =  32:  oracle = 3.11e-03   CS+(P1) = 1.03e-01   chiziqli = 2.87e-01   CS xatosi = oracle(N) bilan teng bo'lgan N ~ 3
+n =  64:  oracle = 1.11e-03   CS+(P1) = 2.80e-02   chiziqli = 2.87e-01   CS xatosi = oracle(N) bilan teng bo'lgan N ~ 8
+n =  96:  oracle = 6.07e-04   CS+(P1) = 1.67e-02   chiziqli = 2.87e-01   CS xatosi = oracle(N) bilan teng bo'lgan N ~ 11
+n = 128:  oracle = 3.93e-04   CS+(P1) = 1.53e-02   chiziqli = 2.85e-01   CS xatosi = oracle(N) bilan teng bo'lgan N ~ 11
+n = 192:  oracle = 2.10e-04   CS+(P1) = 3.05e-03   chiziqli = 2.85e-01   CS xatosi = oracle(N) bilan teng bo'lgan N ~ 33
+n = 256:  oracle = 1.31e-04   CS+(P1) = 1.40e-03   chiziqli = 2.81e-01   CS xatosi = oracle(N) bilan teng bo'lgan N ~ 55
+
+=== I) CS1 va CS2 sonlarda: n = 50, m = 200, |J| = 5, 2000 ta tasodifiy J ===
+CS1: eng kichik singular qiymat: min = 0.574  o'rtacha = 0.792
+CS2: ||v||_1 / (sqrt(n) ||v||_2): min = 0.682  o'rtacha = 0.803   (sqrt(2/pi) = 0.798 )
+taqqoslash: 'spike' vektor e1 uchun nisbat = 0.141
+deyarli bir xil ikki ustun: eng kichik singular qiymat = 0.0071
+
+=== J) Shovqinga barqarorlik (m = 256, n = 64, 8 ta nolmas) ===
+||shovqin||_2 = 0.000:  ||x_hat - x0||_2 = 0.0000
+||shovqin||_2 = 0.001:  ||x_hat - x0||_2 = 0.0014
+||shovqin||_2 = 0.010:  ||x_hat - x0||_2 = 0.0137
+||shovqin||_2 = 0.100:  ||x_hat - x0||_2 = 0.1366
+
+=== K) CS1 bizning Lorenz library uchun (10 ta ustun, normallangan) ===
+|J| =  2:  eng kichik singular qiymat = 0.1805   eng yomon J = ['xy', 'y^2']
+|J| =  3:  eng kichik singular qiymat = 0.0527   eng yomon J = ['1', 'z', 'z^2']
+|J| =  4:  eng kichik singular qiymat = 0.0482   eng yomon J = ['x', 'y', 'xz', 'yz']
+|J| =  6:  eng kichik singular qiymat = 0.0253   eng yomon J = ['1', 'y', 'z', 'x^2', 'xy', 'z^2']
+|J| = 10:  eng kichik singular qiymat = 0.0241   eng yomon J = ['1', 'x', 'y', 'z', 'x^2', 'xy', 'xz', 'y^2', 'yz', 'z^2']
+mutual coherence = 0.9674  juftlik: xy y^2
+
+=== L) Stylized applications: m^(1/4) log^(5/2)(m) ===
+m = 10000:  m^(1/2) = 100,  m^(1/3) = 22,  m^(1/4) = 10.0,  m^(1/4) log^(5/2) m = 2574
+m = 1000000:  m^(1/2) = 1000,  m^(1/3) = 100,  m^(1/4) = 31.6,  m^(1/4) log^(5/2) m = 22435
+weak-l1 misol: sum_{k<=10} 1/k = 2.93  sum_{k<=1000} 1/k = 7.49
+Rasmlar saqlandi / figures saved.
