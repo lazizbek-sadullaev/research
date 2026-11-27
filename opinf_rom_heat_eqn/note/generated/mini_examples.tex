@@ -1,0 +1,208 @@
+\paragraph{\texttt{np.arange(start, stop)}} Integers from start up to stop-1. We use it for the grid index i = 1,...,7.
+
+\begin{lstlisting}[style=py]
+import numpy as np
+i = np.arange(1, 8)
+print(i)
+print(i/8)
+\end{lstlisting}
+
+\begin{lstlisting}[style=out]
+[1 2 3 4 5 6 7]
+[0.125 0.25  0.375 0.5   0.625 0.75  0.875]
+\end{lstlisting}
+
+\paragraph{\texttt{np.ones(n) and np.zeros((m, n))}} Arrays filled with ones or zeros. zeros((m, n)) reserves space for the snapshot matrix.
+
+\begin{lstlisting}[style=py]
+import numpy as np
+print(np.ones(5))
+print(np.zeros((2, 5)))
+\end{lstlisting}
+
+\begin{lstlisting}[style=out]
+[1. 1. 1. 1. 1.]
+[[0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0.]]
+\end{lstlisting}
+
+\paragraph{\texttt{np.diag(v, k)}} Puts the vector v on the k-th diagonal of a square matrix (k = 0 main, k = 1 above, k = -1 below).
+
+\begin{lstlisting}[style=py]
+import numpy as np
+print(np.diag([-2, -2, -2, -2, -2]))
+print(np.diag([1, 1, 1, 1], 1))
+\end{lstlisting}
+
+\begin{lstlisting}[style=out]
+[[-2  0  0  0  0]
+ [ 0 -2  0  0  0]
+ [ 0  0 -2  0  0]
+ [ 0  0  0 -2  0]
+ [ 0  0  0  0 -2]]
+[[0 1 0 0 0]
+ [0 0 1 0 0]
+ [0 0 0 1 0]
+ [0 0 0 0 1]
+ [0 0 0 0 0]]
+\end{lstlisting}
+
+\paragraph{\texttt{Building the 1D Laplacian}} The sum of the three diagonals gives the tridiagonal matrix of Section 6 (here N = 5, without the 1/dx**2 factor).
+
+\begin{lstlisting}[style=py]
+import numpy as np
+N = 5
+T = np.diag(-2*np.ones(N)) + np.diag(np.ones(N-1), 1) + np.diag(np.ones(N-1), -1)
+print(T)
+\end{lstlisting}
+
+\begin{lstlisting}[style=out]
+[[-2.  1.  0.  0.  0.]
+ [ 1. -2.  1.  0.  0.]
+ [ 0.  1. -2.  1.  0.]
+ [ 0.  0.  1. -2.  1.]
+ [ 0.  0.  0.  1. -2.]]
+\end{lstlisting}
+
+\paragraph{\texttt{np.eye(n)}} The identity matrix. A = I + dt L is one explicit Euler step.
+
+\begin{lstlisting}[style=py]
+import numpy as np
+print(np.eye(5))
+\end{lstlisting}
+
+\begin{lstlisting}[style=out]
+[[1. 0. 0. 0. 0.]
+ [0. 1. 0. 0. 0.]
+ [0. 0. 1. 0. 0.]
+ [0. 0. 0. 1. 0.]
+ [0. 0. 0. 0. 1.]]
+\end{lstlisting}
+
+\paragraph{\texttt{The @ operator}} Matrix times vector (or matrix times matrix). One FOM step is A @ x.
+
+\begin{lstlisting}[style=py]
+import numpy as np
+T = np.diag(-2*np.ones(5)) + np.diag(np.ones(4), 1) + np.diag(np.ones(4), -1)
+x = np.array([0., 1., 2., 1., 0.])
+print(T @ x)
+\end{lstlisting}
+
+\begin{lstlisting}[style=out]
+[ 1.  0. -2.  0.  1.]
+\end{lstlisting}
+
+\paragraph{\texttt{Filling columns: X[:, k]}} X[:, k] is column k of X. The time loop writes the state x(k) into column k.
+
+\begin{lstlisting}[style=py]
+import numpy as np
+X = np.zeros((3, 4))
+X[:, 0] = [1., 2., 3.]
+for k in range(3):
+    X[:, k+1] = 0.5 * X[:, k]
+print(X)
+\end{lstlisting}
+
+\begin{lstlisting}[style=out]
+[[1.    0.5   0.25  0.125]
+ [2.    1.    0.5   0.25 ]
+ [3.    1.5   0.75  0.375]]
+\end{lstlisting}
+
+\paragraph{\texttt{Slicing: M[:, :-1] and M[:, 1:]}} All columns except the last, and all columns except the first. Side by side they pair x(k) with x(k+1).
+
+\begin{lstlisting}[style=py]
+import numpy as np
+M = np.arange(10).reshape(2, 5)
+print(M)
+print(M[:, :-1])
+print(M[:, 1:])
+\end{lstlisting}
+
+\begin{lstlisting}[style=out]
+[[0 1 2 3 4]
+ [5 6 7 8 9]]
+[[0 1 2 3]
+ [5 6 7 8]]
+[[1 2 3 4]
+ [6 7 8 9]]
+\end{lstlisting}
+
+\paragraph{\texttt{Transpose .T}} Swaps rows and columns. OpInf stacks the reduced states as ROWS of D, so we transpose.
+
+\begin{lstlisting}[style=py]
+import numpy as np
+M = np.arange(6).reshape(2, 3)
+print(M)
+print(M.T)
+\end{lstlisting}
+
+\begin{lstlisting}[style=out]
+[[0 1 2]
+ [3 4 5]]
+[[0 3]
+ [1 4]
+ [2 5]]
+\end{lstlisting}
+
+\paragraph{\texttt{np.linalg.svd(X, full\_matrices=False)}} X = U diag(s) Wt. Columns of U are the POD modes, s are the singular values (largest first). A rank-1 example: only one singular value is nonzero.
+
+\begin{lstlisting}[style=py]
+import numpy as np
+np.set_printoptions(precision=4, suppress=True)
+X = np.outer([1., 2., 2.], [1., 0.5, 0.25, 0.125, 0.0625])
+U, s, Wt = np.linalg.svd(X, full_matrices=False)
+print(s)
+print(U[:, 0])
+\end{lstlisting}
+
+\begin{lstlisting}[style=out]
+[3.4624 0.     0.    ]
+[-0.3333 -0.6667 -0.6667]
+\end{lstlisting}
+
+\paragraph{\texttt{U[:, :r]}} The first r columns: the POD basis V.
+
+\begin{lstlisting}[style=py]
+import numpy as np
+U = np.arange(15).reshape(5, 3)
+print(U[:, :2])
+\end{lstlisting}
+
+\begin{lstlisting}[style=out]
+[[ 0  1]
+ [ 3  4]
+ [ 6  7]
+ [ 9 10]
+ [12 13]]
+\end{lstlisting}
+
+\paragraph{\texttt{np.linalg.lstsq(D, R, rcond=None)}} Finds the M that makes the residual D M - R as small as possible (least squares). Here the data come from x(k+1) = 0.8 x(k) exactly, so the fitted slope is 0.8.
+
+\begin{lstlisting}[style=py]
+import numpy as np
+x = 0.8**np.arange(6)            # 1, 0.8, 0.64, ...
+D = x[:-1].reshape(-1, 1)        # column of x_k
+R = x[1:].reshape(-1, 1)         # column of x_{k+1}
+M, res, rank, sv = np.linalg.lstsq(D, R, rcond=None)
+print(M)
+\end{lstlisting}
+
+\begin{lstlisting}[style=out]
+[[0.8]]
+\end{lstlisting}
+
+\paragraph{\texttt{np.linalg.norm and np.linalg.eigvals}} The (Frobenius) norm measures the size of a difference; eigvals gives the eigenvalues of a matrix.
+
+\begin{lstlisting}[style=py]
+import numpy as np
+np.set_printoptions(precision=4, suppress=True)
+B = np.array([[0.9, 0.1], [0.1, 0.7]])
+print(np.linalg.norm(B - np.diag([0.9, 0.7])))
+print(np.linalg.eigvals(B))
+\end{lstlisting}
+
+\begin{lstlisting}[style=out]
+0.14142135623730953
+[0.9414+0.j 0.6586+0.j]
+\end{lstlisting}

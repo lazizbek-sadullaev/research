@@ -1,0 +1,16 @@
+singular values: [7.1503 1.2949 0.3185 0.     0.     0.     0.    ]
+plain OpInf:
+ [[0.9557 0.0441]
+ [0.0441 0.5663]]
+re-projection OpInf:
+ [[0.9557 0.0441]
+ [0.0441 0.5663]]
+intrusive V^T A V:
+ [[0.9557 0.0441]
+ [0.0441 0.5663]]
+||A_plain  - A_intr||_F = 6.57e-05
+||A_reproj - A_intr||_F = 7.70e-16
+closure part of the data: max_k ||x_k - V V^T x_k|| = 1.607e-01
+max relative prediction error, plain OpInf  : 0.0802
+max relative prediction error, re-projection: 0.0802
+max relative prediction error, intrusive    : 0.0802
